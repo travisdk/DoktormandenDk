@@ -1,8 +1,13 @@
-﻿@{
-    ViewData["Title"] = "UserChanged";
-}
+﻿@model User
+@{
 
-<div class="alert alert-success">
-    <h2>Brugerprofil nu skiftet!</h2>
+}
+<div>
+   <form asp-action="SetUser" asp-route-id="@Model.Id">
+        <h2>Godkend skift til brugerprofil @Model.Name</h2>
+        <div class="form-group">
+            <input type="submit" value="Godkend" class="btn btn-primary" />
+        </div>
+   </form>
 </div>
 

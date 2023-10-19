@@ -2,17 +2,15 @@
 @{
     ViewData["Title"] = "Index";
 }
-<a asp-action="setuser" asp-route-id="1">setuser 1</a>
-@* <form asp-action="SetUser">
+
     <h1>Bruger Profil</h1>
     <h3>Vælg aktuel profil i demosystemet</h3>
 
-    <select asp-for="@Model.SelectedId">
-        @foreach(User user in @Model.UserList)
-        {
-            <option value="@user.Id">@user.Name</option>
-        }
-    </select>
-
-  <button type="submit" class="btn btn-primary">Gem</button>
-</form> *@
+    <ul class="list-group">
+    @foreach (User user in @Model)
+    {
+        <li class="list-group-item">
+            <a asp-action="SetUser" asp-route-id="@user.Id">@user.Name</a>
+       </li>
+    }
+</ul>

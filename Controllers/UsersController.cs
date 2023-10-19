@@ -8,7 +8,6 @@ using DoktormandenDk.Models;
 namespace DoktormandenDk.Controllers
 {
 
-
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
@@ -21,11 +20,9 @@ namespace DoktormandenDk.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-        
             return View(await _context.Users.ToListAsync());
         }
 
-       
         [HttpGet]
         public async Task<ActionResult> SetUser(int id)
         {
@@ -38,23 +35,25 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-            return View(newCurrentUser); 
+            return View(newCurrentUser);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> SetUser(User user)
+        public async Task<IActionResult> SetUser([Bind("Name, Id, Role")] User user)
         {
             if (user == null)
             {
                 return NotFound();
             }
-
             _userService.SetCurrentUser(user); // Current profile changed
             return RedirectToAction("UserChanged");
 
         }
        
-       
+        public IActionResult UserChanged()
+        {
+            return View();
+        }
     }
 }
