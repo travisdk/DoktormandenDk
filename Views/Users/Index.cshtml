@@ -1,0 +1,18 @@
+﻿@model DoktormandenDk.Controllers.UserProfileSelectorModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form asp-action="SetUser">
+    <h1>Bruger Profil</h1>
+    <h3>Vælg aktuel profil i demosystemet</h3>
+
+    <select asp-for="@Model.SelectedId">
+        @foreach(User user in @Model.UserList)
+        {
+            <option value="@user.Id">@user.Name</option>
+        }
+    </select>
+
+  <button type="submit" class="btn btn-primary">Gem</button>
+</form>
