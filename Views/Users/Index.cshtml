@@ -1,9 +1,9 @@
-﻿@model DoktormandenDk.Controllers.UserProfileSelectorModel
+﻿@model IEnumerable<User>
 @{
     ViewData["Title"] = "Index";
 }
-
-<form asp-action="SetUser">
+<a asp-action="setuser" asp-route-id="1">setuser 1</a>
+@* <form asp-action="SetUser">
     <h1>Bruger Profil</h1>
     <h3>Vælg aktuel profil i demosystemet</h3>
 
@@ -15,4 +15,4 @@
     </select>
 
   <button type="submit" class="btn btn-primary">Gem</button>
-</form>
+</form> *@

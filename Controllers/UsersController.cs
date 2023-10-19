@@ -7,11 +7,7 @@ using DoktormandenDk.Models;
 
 namespace DoktormandenDk.Controllers
 {
-    public class UserProfileSelectorModel
-    {
-        public IEnumerable<User> UserList { get; set; }
-        public int? SelectedId { get; set; }
-    }
+
 
     public class UsersController : Controller
     {
@@ -25,38 +21,40 @@ namespace DoktormandenDk.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            UserProfileSelectorModel selector = new UserProfileSelectorModel
-            {
-                UserList = await _context.Users.ToListAsync(),
-                SelectedId = 0,
-            };
-            return View(selector);
-        }
         
-        [HttpPost] 
-        public async Task<IActionResult> SetUser(UserProfileSelectorModel  userProfileSelectorModel)
-        {
-                if (userProfileSelectorModel.SelectedId == null)
-                {
-                    return NotFound();
-                }
-                User newCurrentUser = await _context.Users.FindAsync(userProfileSelectorModel.SelectedId);
-
-                if (newCurrentUser == null)
-                {
-                    return NotFound();
-                }
-
-                _userService.SetCurrentUser(newCurrentUser); // Current profile changed
-                return RedirectToAction("UserChanged");
-
+            return View(await _context.Users.ToListAsync());
         }
 
-        [HttpGet] 
-        public IActionResult UserChanged()
+       
+        [HttpGet]
+        public async Task<ActionResult> SetUser(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            User newCurrentUser = await _context.Users.FindAsync(id);
+            if (newCurrentUser == null)
+            {
+                return NotFound();
+            }
+            return View(newCurrentUser); 
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> SetUser(User user)
+        {
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _userService.SetCurrentUser(user); // Current profile changed
+            return RedirectToAction("UserChanged");
+
+        }
+       
        
     }
 }
