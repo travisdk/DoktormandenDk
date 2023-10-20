@@ -23,8 +23,8 @@ namespace DoktormandenDk.Controllers
             return View(await _context.Users.ToListAsync());
         }
 
-        [HttpGet]
-        public async Task<ActionResult> SetUser(int id)
+        [HttpPost]
+        public async Task<IActionResult> SetUser(int? id )
         {
             if (id == null)
             {
@@ -35,25 +35,17 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-            return View(newCurrentUser);
+            _userService.SetCurrentUser(newCurrentUser); // Current profile changed
+            return Json(new { redirectToUrl = Url.Action("UserChanged", "Users") });
+            // JS makes the redirect in the ajax success callback
         }
 
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> SetUser([Bind("Name, Id, Role")] User user)
-        {
-            if (user == null)
-            {
-                return NotFound();
-            }
-            _userService.SetCurrentUser(user); // Current profile changed
-            return RedirectToAction("UserChanged");
 
-        }
-       
-        public IActionResult UserChanged()
+        [HttpGet]
+        public ActionResult UserChanged()
         {
             return View();
         }
+     
     }
 }

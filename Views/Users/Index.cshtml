@@ -3,14 +3,37 @@
     ViewData["Title"] = "Index";
 }
 
-    <h1>Bruger Profil</h1>
-    <h3>Vælg aktuel profil i demosystemet</h3>
+    <h2>Bruger Profil</h2>
+    <p class="lead fs-5 ">Vælg aktuel profil til systemet</p>
 
-    <ul class="list-group">
+    <ul class="list-group " style="max-width: 300px;">
     @foreach (User user in @Model)
     {
-        <li class="list-group-item">
-            <a asp-action="SetUser" asp-route-id="@user.Id">@user.Name</a>
+        <li class="list-group-item ">
+            <a class="btn btn-primary selectorLink w-100" href="#"  data-itemid="@user.Id">@user.Name</a>
        </li>
     }
 </ul>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+    
+            $(".selectorLink").click(function (e) {
+                console.log($(this));
+
+                var userId = $(this).data("itemid");
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SetUser")",
+                    dataType: "json",
+                    data: { id: userId },
+                    success: function (response) {
+                        window.location.href = response.redirectToUrl;
+                    }
+                })
+            });
+        });
+   
+    </script>
+}
