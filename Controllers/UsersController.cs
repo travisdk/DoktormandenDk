@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using DoktormandenDk.BusinessLayer;
 using DoktormandenDk.Models;
 
+
 namespace DoktormandenDk.Controllers
 {
-
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly UserService _userService;
-        public UsersController(AppDbContext context, UserService userService)
+        private readonly IUserService _userService;
+        public UsersController(AppDbContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
@@ -20,11 +20,13 @@ namespace DoktormandenDk.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            List<User> users = await _context.Users.ToListAsync();
+            
+            return View(users);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetUser(int? id )
+        public async Task<IActionResult> SetUser(int? id)
         {
             if (id == null)
             {
@@ -36,10 +38,8 @@ namespace DoktormandenDk.Controllers
                 return NotFound();
             }
             _userService.SetCurrentUser(newCurrentUser); // Current profile changed
-            return Json(new { redirectToUrl = Url.Action("UserChanged", "Users") });
-            // JS makes the redirect in the ajax success callback
+            return RedirectToAction("UserChanged");
         }
-
 
         [HttpGet]
         public ActionResult UserChanged()

@@ -2,38 +2,20 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+ <div class="container col-4">
     <h2>Bruger Profil</h2>
     <p class="lead fs-5 ">Vælg aktuel profil til systemet</p>
 
-    <ul class="list-group " style="max-width: 300px;">
-    @foreach (User user in @Model)
-    {
-        <li class="list-group-item ">
-            <a class="btn btn-primary selectorLink w-100" href="#"  data-itemid="@user.Id">@user.Name</a>
-       </li>
-    }
-</ul>
+    <form asp-action="SetUser" method="post">
 
-@section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-    
-            $(".selectorLink").click(function (e) {
-                console.log($(this));
+    <select class="form-control" name="id">
+        <option value="">- Vælg profil -</option>
+        @foreach (User user in Model)
+        {   
+            <option value="@user.Id">@user.Name</option>
+        }
+    </select>
 
-                var userId = $(this).data("itemid");
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("SetUser")",
-                    dataType: "json",
-                    data: { id: userId },
-                    success: function (response) {
-                        window.location.href = response.redirectToUrl;
-                    }
-                })
-            });
-        });
-   
-    </script>
-}
+    <button type="submit" class="btn btn-primary mt-3">Gem</button>
+ </form>
+</div>

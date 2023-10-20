@@ -4,7 +4,7 @@ using DoktormandenDk.Models;
 namespace DoktormandenDk.BusinessLayer
 {
 
-    public class UserService 
+    public class UserService : IUserService
     {
         private readonly AppDbContext _context;
         private User _currentUser;
@@ -12,6 +12,12 @@ namespace DoktormandenDk.BusinessLayer
         public void SetCurrentUser(User currentUser) {
             _currentUser = currentUser;
         }
+
+        public User GetCurrentUser()
+        {
+            return _currentUser;
+        }
+
         public UserService(AppDbContext context) {
             _context = context;
             if (_currentUser == null)
