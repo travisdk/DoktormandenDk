@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DoktormandenDB")));
 
-builder.Services.AddScoped<IUserService, UserService>(); // Userprofile logic for demo purpose
+builder.Services.AddSingleton<IUserService, UserService>(); // Userprofile logic for demo purpose
 
 var app = builder.Build();
 

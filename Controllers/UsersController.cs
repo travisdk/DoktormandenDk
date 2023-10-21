@@ -12,27 +12,27 @@ namespace DoktormandenDk.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IUserService _userService;
-        public UsersController(AppDbContext context, IUserService userService)
+        private List<IUser> _demoUsers;
+        public UsersController(IUserService userService)
         {
-            _context = context;
             _userService = userService;
+            _demoUsers = _userService.GetDemoUsers();
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<User> users = await _context.Users.ToListAsync();
-            
-            return View(users);
+   
+            return View(_demoUsers);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetUser(int? id)
+        public  IActionResult SetUser(string username)
         {
-            if (id == null)
+            if (username == null)
             {
                 return NotFound();
             }
-            User newCurrentUser = await _context.Users.FindAsync(id);
+            IUser newCurrentUser = _demoUsers.Find(u => u.UserName == username);
             if (newCurrentUser == null)
             {
                 return NotFound();

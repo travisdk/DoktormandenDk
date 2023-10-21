@@ -1,30 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DoktormandenDk.Models;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace DoktormandenDk.BusinessLayer
 {
 
     public class UserService : IUserService
     {
-        private readonly AppDbContext _context;
-        private User _currentUser;
+        private List<IUser> _demoUsers;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private IUser _currentUser;
 
-        public void SetCurrentUser(User currentUser) {
+        public void SetCurrentUser(IUser currentUser)
+        {
             _currentUser = currentUser;
         }
-
-        public User GetCurrentUser()
+        public List<IUser> GetDemoUsers()
+        {
+            return _demoUsers;
+        }
+        public IUser GetCurrentUser()
         {
             return _currentUser;
         }
+        public UserService(IServiceScopeFactory serviceScopeFactory)
+        {
+       
+            // In order to get DEMO user data from scoped dbContext => singleton UserService
+            // NOT FOR PRODUCTION USE!
 
-        public UserService(AppDbContext context) {
-            _context = context;
-            if (_currentUser == null)
+            _scopeFactory = serviceScopeFactory;
+            
+            Execute();
+        }
+        public void Execute()
+        {
+            // only runs once - when app is started..
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var allUsers = context.Users.ToList();
-                // hardcoded to "Patient" on App Start (default profile)
-                _currentUser = allUsers[allUsers.Count - 1]; // the last in the user table = Patient role
+                var appDbContext = scope.ServiceProvider.GetService<AppDbContext>();
+                var patients = appDbContext.Patients.ToList();
+                var generalpractitioners = appDbContext.GPs.ToList();
+                _demoUsers = new List<IUser>();
+                _demoUsers.AddRange(patients);
+                _demoUsers.AddRange(generalpractitioners);
+
             }
         }
     }

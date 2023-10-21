@@ -1,4 +1,4 @@
-﻿@model IEnumerable<User>
+﻿@model IEnumerable<IUser>
 @{
     ViewData["Title"] = "Index";
 }
@@ -8,11 +8,11 @@
 
     <form asp-action="SetUser" method="post">
 
-    <select class="form-control" name="id">
+        <select class="form-control" name="username">
         <option value="">- Vælg profil -</option>
-        @foreach (User user in Model)
+        @foreach (IUser user in Model)
         {   
-            <option value="@user.Id">@user.Name</option>
+                <option value="@user.UserName">@user.UserName</option>
         }
     </select>
 

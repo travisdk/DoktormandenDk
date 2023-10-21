@@ -4,6 +4,7 @@ using DoktormandenDk.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoktormandenDk.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231021155159_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,63 +58,11 @@ namespace DoktormandenDk.Migrations
                         new
                         {
                             AppointmentId = 1,
-                            AppointmentTime = new DateTime(2023, 10, 21, 20, 9, 16, 387, DateTimeKind.Local).AddTicks(5084),
+                            AppointmentTime = new DateTime(2023, 10, 21, 17, 51, 59, 46, DateTimeKind.Local).AddTicks(2316),
                             GPId = 1,
                             PatientId = 2,
                             Subject = "Hul i hovedet"
                         });
-                });
-
-            modelBuilder.Entity("DoktormandenDk.Models.ECMessage", b =>
-                {
-                    b.Property<int>("EcMessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EcMessageId"));
-
-                    b.Property<int>("EConsultationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Sender")
-                        .HasColumnType("int");
-
-                    b.HasKey("EcMessageId");
-
-                    b.HasIndex("EConsultationId");
-
-                    b.ToTable("ECMessages");
-                });
-
-            modelBuilder.Entity("DoktormandenDk.Models.EConsultation", b =>
-                {
-                    b.Property<int>("EConsultationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EConsultationId"));
-
-                    b.Property<int>("GPId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EConsultationId");
-
-                    b.HasIndex("GPId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("EConsultations");
                 });
 
             modelBuilder.Entity("DoktormandenDk.Models.GP", b =>
@@ -137,7 +88,7 @@ namespace DoktormandenDk.Migrations
 
                     b.HasKey("GPId");
 
-                    b.ToTable("GPs");
+                    b.ToTable("GP");
 
                     b.HasData(
                         new
@@ -213,41 +164,6 @@ namespace DoktormandenDk.Migrations
                     b.Navigation("GP");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("DoktormandenDk.Models.ECMessage", b =>
-                {
-                    b.HasOne("DoktormandenDk.Models.EConsultation", "EConsultation")
-                        .WithMany("Messages")
-                        .HasForeignKey("EConsultationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EConsultation");
-                });
-
-            modelBuilder.Entity("DoktormandenDk.Models.EConsultation", b =>
-                {
-                    b.HasOne("DoktormandenDk.Models.GP", "GP")
-                        .WithMany()
-                        .HasForeignKey("GPId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DoktormandenDk.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GP");
-
-                    b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("DoktormandenDk.Models.EConsultation", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("DoktormandenDk.Models.GP", b =>
