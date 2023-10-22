@@ -10,19 +10,33 @@ namespace DoktormandenDk.BusinessLayer
     {
         private List<IUser> _demoUsers;
         private readonly IServiceScopeFactory _scopeFactory;
-        private IUser _currentUser;
 
-        public void SetCurrentUser(IUser currentUser)
-        {
-            _currentUser = currentUser;
-        }
+        public IUser? CurrentUser { get; set; } = null; // NO 'logged in' user default
+        
         public List<IUser> GetDemoUsers()
         {
             return _demoUsers;
         }
-        public IUser GetCurrentUser()
+       
+
+        // Is current user a GP
+        public bool IsGP 
+        { 
+            get
+            {
+                if (CurrentUser == null) return false;
+                return CurrentUser.GetType() == typeof(GP);
+            }
+        }
+        // Is current user a Patient
+        public bool IsPatient
         {
-            return _currentUser;
+            get
+            {
+                if (CurrentUser == null) return false;
+                return CurrentUser.GetType() == typeof(Patient);
+
+            }
         }
         public UserService(IServiceScopeFactory serviceScopeFactory)
         {
@@ -31,10 +45,10 @@ namespace DoktormandenDk.BusinessLayer
             // NOT FOR PRODUCTION USE!
 
             _scopeFactory = serviceScopeFactory;
-            
-            Execute();
+            SetupService();
+
         }
-        public void Execute()
+        public void SetupService()
         {
             // only runs once - when app is started..
             using (var scope = _scopeFactory.CreateScope())
@@ -45,8 +59,10 @@ namespace DoktormandenDk.BusinessLayer
                 _demoUsers = new List<IUser>();
                 _demoUsers.AddRange(patients);
                 _demoUsers.AddRange(generalpractitioners);
+                
 
             }
         }
+
     }
 }

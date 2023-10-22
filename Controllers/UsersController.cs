@@ -11,12 +11,14 @@ namespace DoktormandenDk.Controllers
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
+
         private readonly IUserService _userService;
         private List<IUser> _demoUsers;
         public UsersController(IUserService userService)
         {
             _userService = userService;
             _demoUsers = _userService.GetDemoUsers();
+        
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -37,7 +39,7 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-            _userService.SetCurrentUser(newCurrentUser); // Current profile changed
+            _userService.CurrentUser = newCurrentUser; // Current profile changed
             return RedirectToAction("UserChanged");
         }
 

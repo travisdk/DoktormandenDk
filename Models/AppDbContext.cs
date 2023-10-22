@@ -29,7 +29,7 @@ namespace DoktormandenDk.Models
 
             modelBuilder.Entity<Appointment>().HasData(
 
-                new Appointment { AppointmentId=1, GPId=1, PatientId=2, AppointmentTime = DateTime.Now, Subject = "Hul i hovedet" }
+                new Appointment { AppointmentId=1, GPId=1, PatientId=2, AppointmentTime = DateTime.Now, Category=Category.Samtale, AppointmentMessage = "Hul i hovedet" }
 
               );
 

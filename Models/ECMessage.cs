@@ -20,7 +20,7 @@ namespace DoktormandenDk.Models
         [Display(Name="Afsender")]
         public Sender Sender { get; set; }
 
-        public virtual EConsultation? EConsultation { get; set; }
+        public virtual EConsultation EConsultation { get; set; }
 
     }
 }

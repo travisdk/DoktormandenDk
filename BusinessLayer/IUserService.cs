@@ -4,9 +4,12 @@ namespace DoktormandenDk.BusinessLayer
 {
     public interface IUserService
     {
-        public void SetCurrentUser(IUser currentUser);
-        public IUser GetCurrentUser();
+        public IUser CurrentUser { get; set; }
 
         public List<IUser> GetDemoUsers();
+
+        public bool IsGP { get; }
+        public bool IsPatient { get; }
+   
     }
 }

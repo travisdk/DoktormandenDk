@@ -1,0 +1,60 @@
+﻿@model IEnumerable<DoktormandenDk.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Opret</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AppointmentMessage)
+            </th>
+            <th>
+                Lægens navn
+            </th>
+             <th>
+                Patientens navn
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AppointmentTime)
+            </th>
+       
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.AppointmentMessage)
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.GP.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.Name)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AppointmentTime)
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AppointmentId">Rediger</a> |
+                <a asp-action="Details" asp-route-id="@item.AppointmentId">Detaljer</a> |
+                <a asp-action="Delete" asp-route-id="@item.AppointmentId">Slet</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
