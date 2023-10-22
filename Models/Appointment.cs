@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DoktormandenDk.Models
 {
-
     public enum Category
     {
         Samtale,  Opfølgning, Blodprøve, Vaccination

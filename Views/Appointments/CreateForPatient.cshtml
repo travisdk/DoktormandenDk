@@ -23,7 +23,11 @@
                 <select asp-for="GPId" class="form-control" asp-items="ViewBag.GPId"></select>
             </div>
            
-
+            <div class="form-group">
+                <label asp-for="AppointmentTime" class="control-label">Vælg tidspunkt</label>
+                <select asp-for="AppointmentTime" class="form-control" asp-items="ViewBag.AvailableTimes">
+                </select>
+            </div>
 
 
        @*      <div class="form-group">

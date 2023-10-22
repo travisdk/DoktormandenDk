@@ -21,6 +21,7 @@ namespace DoktormandenDk.Models
         public DateTime? BirthDay { get; set; }
 
         public virtual ICollection<Appointment>? Appointments { get; set; }
+        public virtual ICollection<EConsultation>? EConsultations { get; set; }
 
     }
 }

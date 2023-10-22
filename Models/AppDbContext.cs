@@ -29,8 +29,8 @@ namespace DoktormandenDk.Models
 
             modelBuilder.Entity<Appointment>().HasData(
 
-                new Appointment { AppointmentId=1, GPId=1, PatientId=2, AppointmentTime = DateTime.Now, Category=Category.Samtale, AppointmentMessage = "Hul i hovedet" }
-
+                new Appointment { AppointmentId=1, GPId=1, PatientId=2, AppointmentTime = new DateTime(2023, 11,11,9,0,0), Category=Category.Samtale, AppointmentMessage = "Hul i hovedet" },
+                 new Appointment { AppointmentId = 2, GPId = 1, PatientId = 1, AppointmentTime = new DateTime(2023, 11, 11, 9, 30, 0), Category = Category.Samtale, AppointmentMessage = "Smerter i lysken når jeg bukker mig ned, venstre side" }
               );
 
         }

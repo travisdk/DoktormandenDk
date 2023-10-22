@@ -7,12 +7,14 @@ namespace DoktormandenDk.BusinessLayer
     public interface IAppointmentsService
     {
 
-        public Task<List<Appointment>> GetAllForUsernameAsync(string userName);
+
 
         // TODO: Another place for these 2  ??
         public Task<List<GP>> GetAllGPsAsync();
         public Task<List<Patient>> GetAllPatientsAsync();
 
-        public Task<List<DateTime>> GetAvailableTimes(GP gp);
+        public Task<List<DateTime>> GetAvailableTimesAsync(GP gp);
+        public Task<List<Appointment>> GetAllForGPAsync(string userName);
+        public Task<List<Appointment>> GetAllForPatientAsync(string userName);
     }
 }

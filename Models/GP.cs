@@ -21,5 +21,6 @@ namespace DoktormandenDk.Models
         public string License { get; set; }
 
         public virtual ICollection<Appointment>? Appointments { get; set; }
+        public virtual ICollection<EConsultation>? EConsultations { get; set; }
     }
 }

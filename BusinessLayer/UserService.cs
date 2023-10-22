@@ -48,18 +48,17 @@ namespace DoktormandenDk.BusinessLayer
             SetupService();
 
         }
-        public void SetupService()
+        public  void SetupService()
         {
             // only runs once - when app is started..
             using (var scope = _scopeFactory.CreateScope())
             {
                 var appDbContext = scope.ServiceProvider.GetService<AppDbContext>();
-                var patients = appDbContext.Patients.ToList();
-                var generalpractitioners = appDbContext.GPs.ToList();
+                var patients =  appDbContext.Patients.Include(p => p.Appointments).Include(p => p.EConsultations).ToList();
+                var generalpractitioners = appDbContext.GPs.Include(p => p.Appointments).Include(p => p.EConsultations).ToList();
                 _demoUsers = new List<IUser>();
                 _demoUsers.AddRange(patients);
                 _demoUsers.AddRange(generalpractitioners);
-                
 
             }
         }

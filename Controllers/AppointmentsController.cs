@@ -31,7 +31,15 @@ namespace DoktormandenDk.Controllers
         [TestValidAppointmentUser]
         public async Task<IActionResult> Index()
         {
-            var appointments = await _appointmentService.GetAllForUsernameAsync(LoggedInUser.UserName);
+            List<Appointment> appointments = null;
+            if (_userService.IsPatient)
+            {
+                appointments = await _appointmentService.GetAllForPatientAsync(LoggedInUser.UserName);
+            }
+            else if (_userService.IsGP)
+            {
+                appointments = await _appointmentService.GetAllForGPAsync(LoggedInUser.UserName);
+            }
             return View(appointments);
         }
 
@@ -40,7 +48,16 @@ namespace DoktormandenDk.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            var appointments = await _appointmentService.GetAllForUsernameAsync(LoggedInUser.UserName);
+            List<Appointment> appointments = null;
+            if (_userService.IsPatient)
+            {
+                appointments = await _appointmentService.GetAllForPatientAsync(LoggedInUser.UserName);
+            }
+            else if (_userService.IsGP)
+            {
+                appointments = await _appointmentService.GetAllForGPAsync(LoggedInUser.UserName);
+            }
+
             if (id == null || appointments == null)
             {
                 return NotFound();
@@ -63,31 +80,38 @@ namespace DoktormandenDk.Controllers
 
             var GPs = await _appointmentService.GetAllGPsAsync();
             var Patients = await _appointmentService.GetAllPatientsAsync();
-
-            CreateAppointmentViewModel appointmentVM = new CreateAppointmentViewModel
-            {
-                AvailableTimes = await _appointmentService.GetAvailableTimes(GPs[0])
-            };
+            
 
             if (_userService.IsGP)
             {
+                var userAsGP = (GP)LoggedInUser;
+                var availTimes = new SelectList(await _appointmentService.GetAvailableTimesAsync(userAsGP));
+                
+                // his/her own available times
                 ViewData["PatientId"] = new SelectList(Patients, "PatientId", "Name");
-                appointmentVM.Appointment = new Appointment
+                var appointment = new Appointment
                 {
-                    GP = ((GP)_userService.CurrentUser)
+                    GP = userAsGP
                 };
-                return View("CreateForGP", appointmentVM );
+                return View("CreateForGP", appointment );
             }
 
             else if (_userService.IsPatient)
             {
-
-                ViewData["GPId"] = new SelectList(GPs, "GPId", "Name");
-                appointmentVM.Appointment = new Appointment
+                var userAsPatient =   (Patient)LoggedInUser;
+                var availTimes = await _appointmentService.GetAvailableTimesAsync(GPs[0]);
+                // prefetch for first possible GP and convert to SelectList for the view
+                ViewData["AvailableTimes"] = availTimes.Select(item => new SelectListItem
                 {
-                    Patient = ((Patient)_userService.CurrentUser)
+                    Value = item.ToString(),
+                    Text  = item.ToString()
+                });
+                ViewData["GPId"] = new SelectList(GPs, "GPId", "Name");
+                var appointment = new Appointment
+                {
+                    Patient = userAsPatient
                 };
-                return View("CreateForPatient", appointmentVM);
+                return View("CreateForPatient", appointment);
             }
 
 
@@ -115,68 +139,7 @@ namespace DoktormandenDk.Controllers
             return View(appointment);
         }
 
-        // GET: Appointments/Edit/5
-
-        [TestValidAppointmentUser]
-        public async Task<IActionResult> Edit(int? id)
-        {
-           
-
-            if (id == null || _context.Appointments == null)
-            {
-                return NotFound();
-            }
-
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-            ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "License", appointment.GPId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Name", appointment.PatientId);
-            return View(appointment);
-        }
-
-        // POST: Appointments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-
-        [TestValidAppointmentUser]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AppointmentId,PatientId,GPId,AppointmentTime,Subject")] Appointment appointment)
-        {
-            
-
-            if (id != appointment.AppointmentId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(appointment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AppointmentExists(appointment.AppointmentId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "License", appointment.GPId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Name", appointment.PatientId);
-            return View(appointment);
-        }
+       
 
         [TestValidAppointmentUser]
         // GET: Appointments/Delete/5

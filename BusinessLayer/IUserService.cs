@@ -10,6 +10,8 @@ namespace DoktormandenDk.BusinessLayer
 
         public bool IsGP { get; }
         public bool IsPatient { get; }
-   
+
+
+
     }
 }
