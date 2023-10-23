@@ -88,12 +88,14 @@ namespace DoktormandenDk.Controllers
                 var availTimes = new SelectList(await _appointmentService.GetAvailableTimesAsync(userAsGP));
                 
                 // his/her own available times
-                ViewData["PatientId"] = new SelectList(Patients, "PatientId", "Name");
+                //ViewData["PatientId"] = new SelectList(Patients, "PatientId", "Name");
+
                 var appointment = new Appointment
                 {
                     GP = userAsGP
                 };
-                return View("CreateForGP", appointment );
+
+                return View("CreateForGP", new  AppointmentCreateVM { Appointment=appointment, AvailableTimes=availTimes});
             }
 
             else if (_userService.IsPatient)
