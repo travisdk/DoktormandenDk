@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DoktormandenDk.Models;
 using DoktormandenDk.BusinessLayer;
 using DoktormandenDk.Controllers.ActionFilters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DoktormandenDk.Controllers
 {
@@ -19,8 +20,9 @@ namespace DoktormandenDk.Controllers
         private readonly IUserService _userService;
         private readonly IAppointmentsService _appointmentService;
 
-        public AppointmentsController(IUserService userService, IAppointmentsService appointmentService)
+        public AppointmentsController(AppDbContext context, IUserService userService, IAppointmentsService appointmentService)
         {
+            _context = context;
             _userService = userService;
             _appointmentService = appointmentService;
             LoggedInUser = _userService.CurrentUser;
@@ -45,7 +47,6 @@ namespace DoktormandenDk.Controllers
 
         // GET: Appointments/Details/5
         [TestValidAppointmentUser]
-
         public async Task<IActionResult> Details(int? id)
         {
             List<Appointment> appointments = null;
@@ -77,43 +78,49 @@ namespace DoktormandenDk.Controllers
         [TestValidAppointmentUser]
         public async Task<IActionResult> Create()
         {
-
             var GPs = await _appointmentService.GetAllGPsAsync();
             var Patients = await _appointmentService.GetAllPatientsAsync();
-            
 
             if (_userService.IsGP)
             {
                 var userAsGP = (GP)LoggedInUser;
-                var availTimes = new SelectList(await _appointmentService.GetAvailableTimesAsync(userAsGP));
-                
-                // his/her own available times
-                //ViewData["PatientId"] = new SelectList(Patients, "PatientId", "Name");
+                var patient = Patients.Find(p => p.PatientId == 1);
 
                 var appointment = new Appointment
                 {
-                    GP = userAsGP
+                    Patient = patient,
+                    PatientId = 1, // hardcoded to patient with Id=1 for demo!
+                    GP = userAsGP,
+                    GPId = userAsGP.GPId,
+
                 };
 
-                return View("CreateForGP", new  AppointmentCreateVM { Appointment=appointment, AvailableTimes=availTimes});
-            }
+                List<DateTime> listDates = await _appointmentService.GetAvailableTimesAsync(patient.PatientId);
 
+                ViewData["AvailableTimes"] = new SelectList(listDates);
+                return View("CreateForGP", appointment);
+
+            }
             else if (_userService.IsPatient)
             {
-                var userAsPatient =   (Patient)LoggedInUser;
-                var availTimes = await _appointmentService.GetAvailableTimesAsync(GPs[0]);
-                // prefetch for first possible GP and convert to SelectList for the view
-                ViewData["AvailableTimes"] = availTimes.Select(item => new SelectListItem
-                {
-                    Value = item.ToString(),
-                    Text  = item.ToString()
-                });
-                ViewData["GPId"] = new SelectList(GPs, "GPId", "Name");
+                var userAsPatient = (Patient)LoggedInUser;
+
+                var gp = GPs.Find(gp => gp.GPId == 1);
+
                 var appointment = new Appointment
                 {
-                    Patient = userAsPatient
+                    Patient = userAsPatient,
+                    PatientId = userAsPatient.PatientId,
+                    GP = gp,
+                    GPId = 1, // hardcoded for demo 
+                   
                 };
+
+                List<DateTime> listDates = await _appointmentService.GetAvailableTimesAsync( userAsPatient.PatientId);
+               
+                ViewData["AvailableTimes"] = new SelectList(listDates);
                 return View("CreateForPatient", appointment);
+                
             }
 
 
@@ -127,28 +134,57 @@ namespace DoktormandenDk.Controllers
         [TestValidAppointmentUser]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AppointmentId,PatientId,GPId,AppointmentTime,Subject")] Appointment appointment)
+        public async Task<IActionResult> CreateForPatient(Appointment appointment)
         {
-           
             if (ModelState.IsValid)
             {
                 _context.Add(appointment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "License", appointment.GPId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Name", appointment.PatientId);
+           
+            if (appointment.PatientId != null && appointment.GPId !=null)
+            {
+
+                var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
+                ViewData["AvailableTimes"] = new SelectList(times);
+                
+            }
+
+           return View(appointment);
+          
+        }
+        // POST: Appointments/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [TestValidAppointmentUser]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateForGP(Appointment appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(appointment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (appointment.PatientId != null && appointment.GPId != null)
+            {
+
+                var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
+                ViewData["AvailableTimes"] = new SelectList(times);
+            }
+
             return View(appointment);
         }
 
-       
 
         [TestValidAppointmentUser]
         // GET: Appointments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
         
-
             if (id == null || _context.Appointments == null)
             {
                 return NotFound();
@@ -172,8 +208,6 @@ namespace DoktormandenDk.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           
-
             if (_context.Appointments == null)
             {
                 return Problem("Entity set 'AppDbContext.Appointments'  is null.");

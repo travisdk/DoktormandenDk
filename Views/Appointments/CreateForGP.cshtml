@@ -4,31 +4,40 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Opret</h1>
 
-<h4>Appointment</h4>
+<h4>Tidsbestilling</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateForGP">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PatientId" />
+            <input type="hidden" asp-for="GPId" />
 
+            <br />
             <div class="form-group">
-                <label asp-for="GP.Name" class="control-label">Læge</label>
+                <label asp-for="GPId" class="control-label">Læge</label>
                 @Html.DisplayFor(model => model.GP.Name)
             </div>
 
             <div class="form-group">
-                <label asp-for="PatientId" class="control-label">Patient</label>
-                <select asp-for="PatientId" class="form-control" asp-items="ViewBag.PatientId"></select>
+                <label asp-for="Patient.Name" class="control-label">Patient</label>
+                @Html.DisplayFor(model => model.Patient.Name)
             </div>
 
-           
+            <br />
             <div class="form-group">
-                <label asp-for="AppointmentTime" class="control-label"></label>
-                <input asp-for="AppointmentTime" class="form-control" />
-                <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                <label asp-for="AppointmentTime" class="control-label">Vælg tidspunkt</label>
+                <select asp-for="AppointmentTime" class="form-control" asp-items="ViewBag.AvailableTimes">
+                </select>
             </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Category" class="control-label">Kategori</label>
+                <select asp-for="Category"  asp-items="Html.GetEnumSelectList<Category>()"></select>
+            </div>
+        
             <div class="form-group">
                 <label asp-for="AppointmentMessage" class="control-label"></label>
                 <input asp-for="AppointmentMessage" class="form-control" />
@@ -46,5 +55,7 @@
 </div>
 
 @section Scripts {
+    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        
 }

@@ -27,8 +27,8 @@ namespace DoktormandenDk.Models
         [Display(Name="Besked")]
         public string? AppointmentMessage { get; set; }  // Details about the appointment
 
-        public virtual Patient Patient { get; set; }
-        public virtual GP GP { get; set; }
+        public virtual Patient? Patient { get; set; }
+        public virtual GP? GP { get; set; }
 
     }
 }

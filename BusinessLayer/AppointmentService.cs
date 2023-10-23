@@ -41,13 +41,23 @@ namespace DoktormandenDk.BusinessLayer
             return await _context.Patients.Include(p => p.Appointments).ToListAsync();
         }
 
-        // For at given GP find all available times for Appointment.
+        // For at given  Patient find all available times for Appointment.
         // Max 1 month into the feature for demo purpose.
         // We allow for times in 30minutes intervals, from 9:00 to 16:00,
         // every working day.
-        public async Task<List<DateTime>> GetAvailableTimesAsync(GP gp)
+        // In this demo we only use GP with ID=1 !!
+
+        public async Task<List<DateTime>> GetAvailableTimesAsync(int patientId)
         {
-           List<DateTime> availableTimes = new List<DateTime>();
+            // Hardcoded to GP with ID=1 for this demo.
+            GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == 1);
+
+            Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId  == patientId);
+
+            List<Appointment> alreadyTakenTimes = new List<Appointment>();
+            alreadyTakenTimes.AddRange(gp.Appointments);
+            alreadyTakenTimes.AddRange(patient.Appointments);
+            List<DateTime> availableTimes = new List<DateTime>();
             DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);
             
             // earliest:9:00 next day 
@@ -63,11 +73,12 @@ namespace DoktormandenDk.BusinessLayer
 
                 bool timeAlreadyTaken = false;
              
-                foreach(Appointment appointment in gp.Appointments)
+                foreach(Appointment appointment in alreadyTakenTimes)
                 {
                     if (appointment.AppointmentTime.Equals(currentDate))
                         timeAlreadyTaken = true;
                  }
+
                 if (!timeAlreadyTaken)
                 {
                     availableTimes.Add(currentDate);
