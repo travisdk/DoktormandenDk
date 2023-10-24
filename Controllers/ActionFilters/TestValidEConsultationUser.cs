@@ -13,11 +13,12 @@ namespace DoktormandenDk.Controllers.ActionFilters
         {
             base.OnActionExecuting(context);
             var controller = context.Controller;
-            //TODO:
-            //if (((EConsultationsController)controller).LoggedInUser == null) {
-            //    context.Result = new RedirectToActionResult("Forbidden", "EConsultations", null);
-            //}
-          
+         
+            if (((EConsultationsController)controller).LoggedInUser == null)
+            {
+                context.Result = new RedirectToActionResult("Forbidden", "EConsultations", null);
+            }
+
         }
 
     }

@@ -18,7 +18,6 @@ namespace DoktormandenDk.Controllers
         {
             _userService = userService;
             _demoUsers = _userService.GetDemoUsers();
-        
         }
         [HttpGet]
         public async Task<IActionResult> Index()

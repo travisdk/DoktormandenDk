@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<DoktormandenDk.Models.EConsultation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "eKonsultation";
 }
 
-<h1>Index</h1>
+<h1>eKonsultation</h1>
 
 
 <table class="table">
@@ -60,7 +60,7 @@
             </td>
             <td>
                 <a asp-action="EditForGP" asp-route-id="@item.EConsultationId">Besvar</a> |
-                    <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a> |
+                <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a> |
                 <a asp-action="Delete" asp-route-id="@item.EConsultationId">Slet</a>
             </td>
         </tr>

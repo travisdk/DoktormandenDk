@@ -1,0 +1,17 @@
+﻿@model bool
+
+@{
+    string stringValue = String.Empty;
+
+    if (Model == true)
+    {
+        stringValue = "Ja";
+    }
+    else
+    {
+        stringValue = "Nej";
+    }
+
+}
+
+@Html.Raw(stringValue)

@@ -10,7 +10,7 @@ namespace DoktormandenDk.Models
         public int PatientId { get; set; }
         [Required]
         public int GPId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Spørgsmål/besked skal angives!")]
         [Display(Name ="Spørgsmål")]
         public string Question { get; set; }
 
@@ -20,10 +20,9 @@ namespace DoktormandenDk.Models
 
         [Display(Name = "Svar")]
         public string? Answer { get; set; }
-     
         [Display(Name = "SvarTidspunkt")]
         public DateTime? AnswerTime { get; set; }
-        
+        [UIHint("AfsluttetJaNej")] // JA/NEJ instead of checkbox symbol
         [Display(Name = "Afsluttet?")]
         public bool Closed { get; set; } = false;
 

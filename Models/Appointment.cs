@@ -16,11 +16,11 @@ namespace DoktormandenDk.Models
         public int PatientId { get; set; } // Patient
         [Required]
         public int GPId { get; set; }     // General practitioner 
-        [Required]
+        [Required(ErrorMessage = "Tidspunkt skal vælges!")]
         [Display(Name="Mødetidspunkt")]
         public DateTime AppointmentTime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Kategori skal angives")]
         [Display(Name = "Kategori")]
         public Category Category { get; set; } // Category for the reason for the appointment, see above
    

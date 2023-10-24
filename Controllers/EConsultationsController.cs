@@ -18,6 +18,8 @@ namespace DoktormandenDk.Controllers
         private readonly IEConsultationService _eConsultationService;
         private readonly AppDbContext _context;
 
+ 
+
         public EConsultationsController(AppDbContext context, IUserService userService, IEConsultationService eConsultationService)
         {
             _context = context;
@@ -88,10 +90,12 @@ namespace DoktormandenDk.Controllers
             {
                 Patient = userAsPatient,
                 PatientId = userAsPatient.PatientId,
-                QuestionTime = DateTime.Now ,
+                QuestionTime = DateTime.Now,
+         
+                
 
-            };
-            return View("CreateForPatient", eConsultation);
+        };
+            return View(eConsultation);
         }
 
         // POST: EConsultations/CreateForPatient
@@ -104,6 +108,7 @@ namespace DoktormandenDk.Controllers
         {
             if (ModelState.IsValid)
             {
+                eConsultation.QuestionTime = DateTime.Now;
                 _context.Add(eConsultation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -133,7 +138,7 @@ namespace DoktormandenDk.Controllers
             }
             eConsultation.GP = _context.GPs.Find(eConsultation.GPId);
             eConsultation.Patient = _context.Patients.Find(eConsultation.PatientId);
-            eConsultation.AnswerTime = DateTime.Now;
+      
             return View(eConsultation);
         }
 
@@ -154,6 +159,7 @@ namespace DoktormandenDk.Controllers
             {
                 try
                 {
+                    eConsultation.AnswerTime = DateTime.Now;
                     eConsultation.Closed = true;
                     _context.Update(eConsultation);
                     await _context.SaveChangesAsync();

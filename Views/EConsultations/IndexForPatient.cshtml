@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<DoktormandenDk.Models.EConsultation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "eKonsultation";
 }
 
-<h1>Index</h1>
+<h1>eKonsultation</h1>
 
 <p>
     <a asp-action="CreateForPatient">Opret besked til lægen</a>
@@ -52,7 +52,7 @@
                 @Html.DisplayFor(modelItem => item.AnswerTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Closed)
+                @Html.DisplayFor(modelItem => item.Closed, new {@class="form-check-label"})
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Patient.Name)
@@ -62,7 +62,7 @@
             </td>
             <td>
           
-                <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a> |
+                <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a>
              
             </td>
         </tr>
