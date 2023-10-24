@@ -1,62 +1,57 @@
 ﻿@model DoktormandenDk.Models.EConsultation
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Besvar";
 }
 
-<h1>Edit</h1>
+<h1>Besvar patient</h1>
 
 <h4>EConsultation</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="EditForGP">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="GPId" />
+            <input type="hidden" asp-for="PatientId" />
             <input type="hidden" asp-for="EConsultationId" />
+            <input type="hidden" asp-for="AnswerTime"  />
+            <input type="hidden" asp-for="QuestionTime" />
+            <input type="hidden" asp-for="Question" />
+
             <div class="form-group">
-                <label asp-for="PatientId" class="control-label"></label>
-                <select asp-for="PatientId" class="form-control" asp-items="ViewBag.PatientId"></select>
-                <span asp-validation-for="PatientId" class="text-danger"></span>
+                <label asp-for="GPId" class="control-label">Læge</label>
+                @Html.DisplayFor(model => model.GP.Name)
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Patient.Name" class="control-label">Patient</label>
+                @Html.DisplayFor(model => model.Patient.Name)
             </div>
             <div class="form-group">
-                <label asp-for="GPId" class="control-label"></label>
-                <select asp-for="GPId" class="form-control" asp-items="ViewBag.GPId"></select>
-                <span asp-validation-for="GPId" class="text-danger"></span>
+                <label asp-for="Question" class="control-label">Besked fra patienten</label>
+                @Html.TextAreaFor(m => m.Question, new {@class="form-control" , disabled="disabled"}   )
             </div>
             <div class="form-group">
-                <label asp-for="Question" class="control-label"></label>
-                <input asp-for="Question" class="form-control" />
-                <span asp-validation-for="Question" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuestionTime" class="control-label"></label>
-                <input asp-for="QuestionTime" class="form-control" />
-                <span asp-validation-for="QuestionTime" class="text-danger"></span>
+                @Html.LabelFor(model => model.QuestionTime)
+                @Html.DisplayFor(model=>model.QuestionTime)
+   
             </div>
             <div class="form-group">
                 <label asp-for="Answer" class="control-label"></label>
                 <input asp-for="Answer" class="form-control" />
                 <span asp-validation-for="Answer" class="text-danger"></span>
             </div>
+           
             <div class="form-group">
-                <label asp-for="AnswerTime" class="control-label"></label>
-                <input asp-for="AnswerTime" class="form-control" />
-                <span asp-validation-for="AnswerTime" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Closed" /> @Html.DisplayNameFor(model => model.Closed)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Besvar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Tilbage til listen</a>
 </div>
 
 @section Scripts {

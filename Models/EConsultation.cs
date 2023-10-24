@@ -16,13 +16,13 @@ namespace DoktormandenDk.Models
 
         [Required]
         [Display(Name ="SpørgsmålTidspunkt")]
-        public DateTime QuestionTime { get; set; }
+        public DateTime? QuestionTime { get; set; }
 
         [Display(Name = "Svar")]
         public string? Answer { get; set; }
-
+     
         [Display(Name = "SvarTidspunkt")]
-        public DateTime AnswerTime { get; set; }
+        public DateTime? AnswerTime { get; set; }
         
         [Display(Name = "Afsluttet?")]
         public bool Closed { get; set; } = false;

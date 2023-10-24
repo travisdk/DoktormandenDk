@@ -88,7 +88,8 @@ namespace DoktormandenDk.Controllers
             {
                 Patient = userAsPatient,
                 PatientId = userAsPatient.PatientId,
-                QuestionTime = DateTime.Now,
+                QuestionTime = DateTime.Now ,
+
             };
             return View("CreateForPatient", eConsultation);
         }
@@ -130,8 +131,9 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-            ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "License", eConsultation.GPId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Name", eConsultation.PatientId);
+            eConsultation.GP = _context.GPs.Find(eConsultation.GPId);
+            eConsultation.Patient = _context.Patients.Find(eConsultation.PatientId);
+            eConsultation.AnswerTime = DateTime.Now;
             return View(eConsultation);
         }
 
@@ -141,7 +143,7 @@ namespace DoktormandenDk.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [TestValidEConsultationUser]
-        public async Task<IActionResult> Edit(int id, [Bind("EConsultationId,PatientId,GPId,Question,QuestionTime,Answer,AnswerTime,Closed")] EConsultation eConsultation)
+        public async Task<IActionResult> EditForGP(int id, [Bind("EConsultationId,PatientId,GPId,Question,QuestionTime,Answer,AnswerTime,Closed")] EConsultation eConsultation)
         {
             if (id != eConsultation.EConsultationId)
             {
@@ -152,6 +154,7 @@ namespace DoktormandenDk.Controllers
             {
                 try
                 {
+                    eConsultation.Closed = true;
                     _context.Update(eConsultation);
                     await _context.SaveChangesAsync();
                 }
@@ -168,8 +171,7 @@ namespace DoktormandenDk.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "License", eConsultation.GPId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Name", eConsultation.PatientId);
+
             return View(eConsultation);
         }
 
