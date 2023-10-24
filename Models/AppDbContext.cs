@@ -8,7 +8,7 @@ namespace DoktormandenDk.Models
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<GP> GPs { get; set; }  
         public DbSet<EConsultation> EConsultations { get; set; }
-        public DbSet<ECMessage> ECMessages { get; set; }
+     
 
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
         {

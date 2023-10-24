@@ -7,8 +7,6 @@ namespace DoktormandenDk.BusinessLayer
     public interface IAppointmentsService
     {
 
-
-
         // TODO: Another place for these 2  ??
         public Task<List<GP>> GetAllGPsAsync();
         public Task<List<Patient>> GetAllPatientsAsync();

@@ -14,26 +14,7 @@ namespace DoktormandenDk.Controllers
         {
             _context = dbContext;
 
-            //foreach (var patient in _context.Patients.Include(p => p.Appointments))
-            //{
-
-            //    System.Diagnostics.Debug.WriteLine(patient.Name);
-            //    foreach (var ap in patient.Appointments)
-            //    {
-            //        System.Diagnostics.Debug.WriteLine($"SUBJECT: {ap.Subject}");
-            //    }
-            //}
-
-            //foreach (var gp in _context.GPs)
-            //{
-
-            //    System.Diagnostics.Debug.WriteLine(gp.Name);
-            //}
-            //foreach (var appointment in _context.Appointments)
-            //{
-            //    System.Diagnostics.Debug.WriteLine(appointment.Patient.Name + " " + appointment.GP.Name);
-            //}
-     
+            
         }
 
         public IActionResult Index()

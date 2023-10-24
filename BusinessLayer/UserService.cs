@@ -17,7 +17,6 @@ namespace DoktormandenDk.BusinessLayer
         {
             return _demoUsers;
         }
-       
 
         // Is current user a GP
         public bool IsGP 

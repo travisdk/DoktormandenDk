@@ -4,6 +4,7 @@ using DoktormandenDk.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoktormandenDk.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231024044456_changedECstructure")]
+    partial class changedECstructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,9 +99,6 @@ namespace DoktormandenDk.Migrations
 
                     b.Property<DateTime>("AnswerTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("Closed")
-                        .HasColumnType("bit");
 
                     b.Property<int>("GPId")
                         .HasColumnType("int");

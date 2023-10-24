@@ -1,0 +1,44 @@
+﻿@model DoktormandenDk.Models.EConsultation
+
+@{
+    ViewData["Title"] = "Opret besked";
+}
+
+<h1>Opret besked</h1>
+
+<h4>E-Konsultation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateForPatient">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PatientId" />
+         
+            <div class="form-group">
+                <label asp-for="Patient.Name" class="control-label">Patient</label>
+                @Html.DisplayFor(model => model.Patient.Name)
+            </div>
+            <div class="form-group">
+                <label asp-for="GPId" class="control-label">Læge</label>
+                <select asp-for="GPId" class="form-control" asp-items="ViewBag.GPId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Question" class="control-label">Dit spørgsmål/besked til lægen</label>
+                @Html.TextAreaFor(m => m.Question, new {@class="form-control"})
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Tilbage til listen</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
