@@ -1,18 +1,30 @@
-﻿@model IEnumerable<IUser>
+﻿@model DoktormandenDk.Models.ViewModels.UserVM
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vælg brugerprofil";
+    
 }
  <div class="container col-4">
-    <h2>Bruger Profil</h2>
+    <h2>Brugerprofil</h2>
+
+
     <p class="lead fs-5 ">Vælg aktuel profil til systemet</p>
 
     <form asp-action="SetUser" method="post">
 
         <select class="form-control" name="username">
         <option value="">- Vælg profil -</option>
-        @foreach (IUser user in Model)
-        {   
-                <option value="@user.UserName">@user.UserName</option>
+
+         @foreach (IUser user in Model.DemoUsers)
+            {
+                if (Model.CurrentUser != null && Model.CurrentUser.UserName == user.UserName)
+                {
+                    <option value="@user.UserName" selected >@user.UserName</option>
+                }
+                else
+                {
+                    <option value="@user.UserName">@user.UserName</option>
+                }
+               
         }
     </select>
 

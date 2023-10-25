@@ -4,11 +4,11 @@
     ViewData["Title"] = "Slet konsultation";
 }
 
-<h1>Delete</h1>
+<h1>Slette konsulation</h1>
 
 <h3>Er du sikker på du ønsker at slette e-Konsultationen?</h3>
 <div>
-    <h4>EConsultation</h4>
+    <h4>E-konsultation</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -57,7 +57,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="EConsultationId" />
-        <input type="submit" value="Slet" class="btn btn-danger" /> |
-        <a asp-action="Index">Tilbage til listen</a>
+        <input type="submit" value="Slet" class="btn btn-danger" />
+        <a class="btn btn-outline-dark" asp-action="Index">Tilbage til listen</a>
     </form>
 </div>

@@ -4,6 +4,7 @@ using DoktormandenDk.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoktormandenDk.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025115609_newtestdata")]
+    partial class newtestdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,7 +133,7 @@ namespace DoktormandenDk.Migrations
                             GPId = 1,
                             PatientId = 2,
                             Question = "Kan du se om der kommet svar fra Riget?",
-                            QuestionTime = new DateTime(2023, 7, 7, 15, 0, 0, 0, DateTimeKind.Unspecified)
+                            QuestionTime = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -139,7 +142,7 @@ namespace DoktormandenDk.Migrations
                             GPId = 2,
                             PatientId = 1,
                             Question = "Jeg har meget ondt i min venstre skulder efter et uheld på job - kan jeg evt få recept eller skal du se mig først?",
-                            QuestionTime = new DateTime(2023, 7, 6, 11, 30, 0, 0, DateTimeKind.Unspecified)
+                            QuestionTime = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -148,13 +151,13 @@ namespace DoktormandenDk.Migrations
                             GPId = 2,
                             PatientId = 2,
                             Question = "Min høfeber er helt enorm lige nu - måske skal jeg op i dosis?",
-                            QuestionTime = new DateTime(2023, 9, 21, 12, 30, 0, 0, DateTimeKind.Unspecified)
+                            QuestionTime = new DateTime(2023, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             EConsultationId = 4,
                             Answer = "Det er helt normalt - ikke så meget vi kan gøre her fra. Det skal løbes væk",
-                            AnswerTime = new DateTime(2023, 10, 11, 13, 30, 0, 0, DateTimeKind.Unspecified),
+                            AnswerTime = new DateTime(2023, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Closed = false,
                             GPId = 2,
                             PatientId = 2,
@@ -194,14 +197,14 @@ namespace DoktormandenDk.Migrations
                             GPId = 1,
                             License = "AB3532Z",
                             Name = "Børge Ordrup",
-                            UserName = "Læge-B-Ordrup"
+                            UserName = "Læge 1"
                         },
                         new
                         {
                             GPId = 2,
                             License = "ZZ9922B",
                             Name = "Klaus Spellenberg",
-                            UserName = "Læge-K-Spellenberg"
+                            UserName = "Læge 2"
                         });
                 });
 
@@ -234,14 +237,14 @@ namespace DoktormandenDk.Migrations
                             PatientId = 1,
                             BirthDay = new DateTime(1959, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Peter Hansen",
-                            UserName = "Patient-P-Hansen"
+                            UserName = "Patient A"
                         },
                         new
                         {
                             PatientId = 2,
                             BirthDay = new DateTime(1976, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Ole Jensen",
-                            UserName = "Patient-O-Jensen"
+                            UserName = "Patient B"
                         });
                 });
 

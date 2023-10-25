@@ -59,9 +59,9 @@
                 @Html.DisplayFor(modelItem => item.GP.Name)
             </td>
             <td>
-                <a asp-action="EditForGP" asp-route-id="@item.EConsultationId">Besvar</a> |
-                <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a> |
-                <a asp-action="Delete" asp-route-id="@item.EConsultationId">Slet</a>
+               <a class="btn btn-outline-dark" asp-action="EditForGP" asp-route-id="@item.EConsultationId">Besvar</a>
+               <a class="btn btn-outline-dark"  asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a>
+               <a class="btn btn-outline-dark"  asp-action="Delete" asp-route-id="@item.EConsultationId">Slet</a>
             </td>
         </tr>
 }

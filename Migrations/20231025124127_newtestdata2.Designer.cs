@@ -4,6 +4,7 @@ using DoktormandenDk.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoktormandenDk.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025124127_newtestdata2")]
+    partial class newtestdata2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,14 +197,14 @@ namespace DoktormandenDk.Migrations
                             GPId = 1,
                             License = "AB3532Z",
                             Name = "Børge Ordrup",
-                            UserName = "Læge-B-Ordrup"
+                            UserName = "Læge 1"
                         },
                         new
                         {
                             GPId = 2,
                             License = "ZZ9922B",
                             Name = "Klaus Spellenberg",
-                            UserName = "Læge-K-Spellenberg"
+                            UserName = "Læge 2"
                         });
                 });
 
@@ -234,14 +237,14 @@ namespace DoktormandenDk.Migrations
                             PatientId = 1,
                             BirthDay = new DateTime(1959, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Peter Hansen",
-                            UserName = "Patient-P-Hansen"
+                            UserName = "Patient A"
                         },
                         new
                         {
                             PatientId = 2,
                             BirthDay = new DateTime(1976, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Ole Jensen",
-                            UserName = "Patient-O-Jensen"
+                            UserName = "Patient B"
                         });
                 });
 

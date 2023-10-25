@@ -17,20 +17,20 @@
             <input type="hidden" asp-for="AnswerTime" class="form-control" />
 
             <div class="form-group">
-                <label asp-for="Patient.Name" class="control-label">Patient</label>
+                <label asp-for="Patient.Name" class="control-label fw-bold">Patient</label>
                 @Html.DisplayFor(model => model.Patient.Name)
             </div>
             <div class="form-group">
-                <label asp-for="GPId" class="control-label">Læge</label>
+                <label asp-for="GPId" class="control-label fw-bold">Læge:</label>
                 <select asp-for="GPId" class="form-control" asp-items="ViewBag.GPId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Question" class="control-label">Dit spørgsmål/besked til lægen</label>
+                <label asp-for="Question" class="control-label fw-bold">Dit spørgsmål/besked til lægen</label>
                 @Html.TextAreaFor(m => m.Question, new {@class="form-control",@rows=10, @cols=40})
                 <span asp-validation-for="Question" class="text-danger"></span>
             </div>
            
-            <div class="form-group">
+            <div class="form-group my-2">
                 <input type="submit" value="Send besked" class="btn btn-primary" />
             </div>
         </form>
@@ -38,7 +38,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Tilbage til listen</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Tilbage til listen</a>
 </div>
 
 @section Scripts {

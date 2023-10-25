@@ -7,7 +7,7 @@
 <h1>eKonsultation</h1>
 
 <p>
-    <a asp-action="CreateForPatient">Opret besked til lægen</a>
+    <a class="btn btn-primary" asp-action="CreateForPatient"><i class="bi bi-file-earmark-plus"></i> Opret besked til lægen </a>
 </p>
 <table class="table">
     <thead>
@@ -61,8 +61,7 @@
                 @Html.DisplayFor(modelItem => item.GP.Name)
             </td>
             <td>
-          
-                <a asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a>
+               <a class="btn btn-outline-dark" asp-action="Details" asp-route-id="@item.EConsultationId">Detaljer</a>
              
             </td>
         </tr>

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<DoktormandenDk.Models.Appointment>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tidsbestillinger";
 }
 
 <h1>Dine tider</h1>
 
 <p>
-    <a asp-action="Create">Opret</a>
+    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-file-earmark-plus"></i> Bestil ny tid </a>
 </p>
 <table class="table">
     <thead>
@@ -28,7 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentTime)
             </th>
-       
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -50,8 +50,8 @@
                  @Html.DisplayFor(modelItem => item.AppointmentTime)
                 </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.AppointmentId">Detaljer</a> |
-                <a asp-action="Delete" asp-route-id="@item.AppointmentId">Slet</a>
+                <a class="btn btn-outline-dark" asp-action="Details" asp-route-id="@item.AppointmentId">Detaljer</a>
+                <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.AppointmentId">Slet</a>
             </td>
         </tr>
 }

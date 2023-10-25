@@ -6,12 +6,12 @@
     ViewData["Title"] = "Besvar";
 }
 
-<h1>Besvar patient</h1>
+<h1>Svar patient</h1>
 
-<h4>EConsultation</h4>
+<h4>E-Konsultation</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="EditForGP">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="GPId" />
@@ -22,39 +22,45 @@
             <input type="hidden" asp-for="Question" />
 
             <div class="form-group">
-                <label asp-for="GPId" class="control-label">Læge</label>
+                <label asp-for="GPId" class="control-label fw-bold">Læge:</label>
                 @Html.DisplayFor(model => model.GP.Name)
             </div>
 
             <div class="form-group">
-                <label asp-for="Patient.Name" class="control-label">Patient</label>
+                <label asp-for="Patient.Name" class="control-label fw-bold">Patient:</label>
                 @Html.DisplayFor(model => model.Patient.Name)
-            </div>
-            <div class="form-group">
-                <label asp-for="Question" class="control-label">Besked fra patienten</label>
-                @Html.TextAreaFor(m => m.Question, new {@class="form-control" , disabled="disabled"}   )
-            </div>
+            </div>            
+            
             <div class="form-group">
                 @Html.LabelFor(model => model.QuestionTime)
                 @Html.DisplayFor(model=>model.QuestionTime)
             </div>
             <div class="form-group">
-                <label asp-for="Answer" class="control-label"></label>
-                @Html.TextAreaFor(m => m.Answer, new {@class="form-control",@rows=10, @cols=40 })
+                <label asp-for="Question" class="control-label fw-bold">Besked fra patienten</label>
+                @Html.TextAreaFor(m => m.Question, new {@class="form-control" , disabled="disabled"}   )
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Answer" class="control-label fw-bold">Svar</label>
+                @Html.TextAreaFor(m => m.Answer, new {@class="form-control",@rows=8, @cols=40 })
 
             </div>
-           
-            <div class="form-group">
+
+            <div class="form-group my-2">
                 <input type="submit" value="Besvar" class="btn btn-primary" />
             </div>
+           
+
+
         </form>
     </div>
+
 </div>
+
 
 <div>
-    <a asp-action="Index">Tilbage til listen</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Tilbage til listen</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

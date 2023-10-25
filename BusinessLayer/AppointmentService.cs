@@ -48,7 +48,8 @@ namespace DoktormandenDk.BusinessLayer
         {
             {
                 var appointments = await _context.Appointments.Where(a => a.GP.UserName == userName)
-                    .Include(a => a.Patient).ToListAsync();
+                    .Include(a => a.Patient)
+                    .Include(a => a.GP).ToListAsync();
 
                 return appointments;
             }

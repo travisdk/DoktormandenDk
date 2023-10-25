@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoktormandenDk.BusinessLayer;
 using DoktormandenDk.Models;
-
+using DoktormandenDk.Models.ViewModels;
 
 namespace DoktormandenDk.Controllers
 {
@@ -14,6 +14,7 @@ namespace DoktormandenDk.Controllers
 
         private readonly IUserService _userService;
         private List<IUser> _demoUsers;
+
         public UsersController(IUserService userService)
         {
             _userService = userService;
@@ -22,8 +23,7 @@ namespace DoktormandenDk.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-   
-            return View(_demoUsers);
+            return View(new UserVM { DemoUsers = _demoUsers, CurrentUser = _userService.CurrentUser });
         }
 
         [HttpPost]
@@ -31,12 +31,12 @@ namespace DoktormandenDk.Controllers
         {
             if (username == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
             IUser newCurrentUser = _demoUsers.Find(u => u.UserName == username);
             if (newCurrentUser == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
             _userService.CurrentUser = newCurrentUser; // Current profile changed
             return RedirectToAction("UserChanged");

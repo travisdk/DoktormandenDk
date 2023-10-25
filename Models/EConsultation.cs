@@ -15,12 +15,12 @@ namespace DoktormandenDk.Models
         public string Question { get; set; }
 
         [Required]
-        [Display(Name ="SpørgsmålTidspunkt")]
+        [Display(Name ="Dato for besked")]
         public DateTime? QuestionTime { get; set; }
 
         [Display(Name = "Svar")]
         public string? Answer { get; set; }
-        [Display(Name = "SvarTidspunkt")]
+        [Display(Name = "Dato svar")]
         public DateTime? AnswerTime { get; set; }
         [UIHint("AfsluttetJaNej")] // JA/NEJ instead of checkbox symbol
         [Display(Name = "Afsluttet?")]
