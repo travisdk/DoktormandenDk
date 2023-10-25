@@ -11,7 +11,40 @@ namespace DoktormandenDk.BusinessLayer
         {
             _context = context;
         }
-        public async Task<List<Appointment>> GetAllForGPAsync(string userName)
+
+        public async Task<bool> AddAppointment(Appointment appointment )
+        {
+            _context.Add(appointment);
+            return await _context.SaveChangesAsync() > 0;
+        }
+        public async Task<Appointment?> GetAppointmentFromId(int? id)
+        {
+            return await _context.Appointments
+                  .Include(e => e.GP)
+                  .Include(e => e.Patient)
+                  .FirstOrDefaultAsync(m => m.AppointmentId == id);
+        }
+
+        public async Task<bool> CancelAppointmentById(int id)
+        {
+            if (_context.Appointments == null)
+            {
+                throw (new Exception("Entity set 'Appointments'  is null."));
+            }
+            var appointment = await _context.Appointments.FindAsync(id);
+            if (appointment != null)
+            {
+                _context.Appointments.Remove(appointment);
+            }
+
+            return await _context.SaveChangesAsync() > 0;
+
+        }
+        public bool AppointmentExists(int id)
+        {
+            return (_context.Appointments?.Any(e => e.AppointmentId == id)).GetValueOrDefault();
+        }
+        public async Task<List<Appointment>> GetAllForGP(string userName)
         {
             {
                 var appointments = await _context.Appointments.Where(a => a.GP.UserName == userName)
@@ -21,7 +54,7 @@ namespace DoktormandenDk.BusinessLayer
             }
         }
 
-        public async Task<List<Appointment>> GetAllForPatientAsync(string userName)
+        public async Task<List<Appointment>> GetAllForPatient(string userName)
         {
             {
                 var appointments = await _context.Appointments.Where(a => a.Patient.UserName == userName)
@@ -32,12 +65,15 @@ namespace DoktormandenDk.BusinessLayer
             }
         }
 
-        public async Task<List<GP>> GetAllGPsAsync()
+        public async Task<List<GP>> GetAllGPs()
         {
             return await _context.GPs.Include(gp => gp.Appointments).ToListAsync();
         }
-
-        public async Task<List<Patient>> GetAllPatientsAsync()
+        public async Task<IEnumerable<Appointment>?> GetAllAppointments()
+        {
+            return await _context.Appointments.ToListAsync();
+        }
+        public async Task<List<Patient>> GetAllPatients()
         {
             return await _context.Patients.Include(p => p.Appointments).ToListAsync();
         }
@@ -48,7 +84,7 @@ namespace DoktormandenDk.BusinessLayer
         // every working day.
         // In this demo we only use GP with ID=1 !!
 
-        public async Task<List<DateTime>> GetAvailableTimesAsync(int gpId, int patientId)
+        public async Task<List<DateTime>> GetAvailableTimes(int gpId, int patientId)
         {
             GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == gpId);
             Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == 1);

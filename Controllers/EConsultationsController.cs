@@ -18,7 +18,7 @@ namespace DoktormandenDk.Controllers
         private readonly IEConsultationService _eConsultationService;
         private readonly AppDbContext _context;
 
- 
+
 
         public EConsultationsController(AppDbContext context, IUserService userService, IEConsultationService eConsultationService)
         {
@@ -35,12 +35,12 @@ namespace DoktormandenDk.Controllers
             List<EConsultation> eConsultations = null;
             if (_userService.IsPatient)
             {
-                eConsultations = await _eConsultationService.GetAllForPatientAsync(LoggedInUser.UserName);
+                eConsultations = await _eConsultationService.GetAllForPatient(LoggedInUser.UserName);
                 return View("IndexForPatient", eConsultations);
             }
             else if (_userService.IsGP)
             {
-                eConsultations = await _eConsultationService.GetAllForGPAsync(LoggedInUser.UserName);
+                eConsultations = await _eConsultationService.GetAllForGP(LoggedInUser.UserName);
                 return View("IndexForGP", eConsultations);
             }
             return NotFound();
@@ -53,13 +53,13 @@ namespace DoktormandenDk.Controllers
             List<EConsultation> eConsultations = null;
             if (_userService.IsPatient)
             {
-                eConsultations = await _eConsultationService.GetAllForPatientAsync(LoggedInUser.UserName);
+                eConsultations = await _eConsultationService.GetAllForPatient(LoggedInUser.UserName);
             }
             else if (_userService.IsGP)
             {
-                eConsultations = await _eConsultationService.GetAllForGPAsync(LoggedInUser.UserName);
+                eConsultations = await _eConsultationService.GetAllForGP(LoggedInUser.UserName);
             }
-            if (id == null || _context.EConsultations == null)
+            if (id == null || eConsultations == null)
             {
                 return NotFound();
             }
@@ -82,7 +82,7 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-
+            
             ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "Name");
     
             var userAsPatient = (Patient)LoggedInUser;
@@ -109,8 +109,8 @@ namespace DoktormandenDk.Controllers
             if (ModelState.IsValid)
             {
                 eConsultation.QuestionTime = DateTime.Now;
-                _context.Add(eConsultation);
-                await _context.SaveChangesAsync();
+                await _eConsultationService.AddConsultation(eConsultation);
+ 
                 return RedirectToAction("Index");
             }
             ViewData["GPId"] = new SelectList(_context.GPs, "GPId", "Name", eConsultation.GPId);
@@ -160,12 +160,11 @@ namespace DoktormandenDk.Controllers
                 {
                     eConsultation.AnswerTime = DateTime.Now;
                     eConsultation.Closed = true;
-                    _context.Update(eConsultation);
-                    await _context.SaveChangesAsync();
+                    await _eConsultationService.UpdateConsultation(eConsultation);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EConsultationExists(eConsultation.EConsultationId))
+                    if (!_eConsultationService.EConsultationExists (eConsultation.EConsultationId))
                     {
                         return NotFound();
                     }
@@ -184,15 +183,15 @@ namespace DoktormandenDk.Controllers
         [TestValidEConsultationUser]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.EConsultations == null)
+            var consultations = await _eConsultationService.GetAllConsultations();
+   
+             if (id == null || consultations == null)
             {
                 return NotFound();
             }
 
-            var eConsultation = await _context.EConsultations
-                .Include(e => e.GP)
-                .Include(e => e.Patient)
-                .FirstOrDefaultAsync(m => m.EConsultationId == id);
+            var eConsultation = await _eConsultationService.GetEConsultationFromId(id);
+
             if (eConsultation == null)
             {
                 return NotFound();
@@ -207,17 +206,20 @@ namespace DoktormandenDk.Controllers
         [TestValidEConsultationUser]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.EConsultations == null)
-            {
-                return Problem("Entity set 'AppDbContext.EConsultations'  is null.");
-            }
-            var eConsultation = await _context.EConsultations.FindAsync(id);
-            if (eConsultation != null)
-            {
-                _context.EConsultations.Remove(eConsultation);
-            }
+            await _eConsultationService.CancelConsultationById(id);
+            //var consultations = _eConsultationService.GetAllConsultations();
+            //if (consultations == null)
+            //{
+            //    return Problem("Entity set 'AppDbContext.EConsultations'  is null.");
+            //}
+            //var eConsultation = await _eConsultationService.GetEConsultationFromId(id);
+            //if (eConsultation != null)
+            //{
+            //   await _eConsultationService.CancelConsultation(eConsultation);
+             
+            //}
             
-            await _context.SaveChangesAsync();
+ 
             return RedirectToAction(nameof(Index));
         }
 
@@ -225,9 +227,6 @@ namespace DoktormandenDk.Controllers
         {
             return View();
         }
-        private bool EConsultationExists(int id)
-        {
-          return (_context.EConsultations?.Any(e => e.EConsultationId == id)).GetValueOrDefault();
-        }
+
     }
 }

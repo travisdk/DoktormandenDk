@@ -64,8 +64,14 @@
 
     <script>
         $(document).ready(function () {
-          
+            $("#AppointmentTime").attr("disabled", "disabled");
+
+  
              $("#PatientId").change(function () {
+
+                if ($("#PatientId").val() == null) return false;
+                $("#AppointmentTime").removeAttr("disabled");
+
                 var data = {
                     gpId: $("#GPId").val(),
                     patientId: $("#PatientId").val()

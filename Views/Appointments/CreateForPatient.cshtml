@@ -57,9 +57,10 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $(document).ready(function () {
-        
-            $("#GPId").change(function () {
-
+                $("#AppointmentTime").attr("disabled", "disabled");
+                $("#GPId").change(function () {
+                if ( $("#GPId").val() == null) return false;
+                $("#AppointmentTime").removeAttr("disabled");
                 var data = {
                     gpId: $("#GPId").val(),
                     patientId: $("#PatientId").val()

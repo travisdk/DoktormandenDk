@@ -6,13 +6,16 @@ namespace DoktormandenDk.BusinessLayer
 {
     public interface IAppointmentsService
     {
+        public Task<bool> AddAppointment(Appointment appointment);
+        public Task<List<GP>> GetAllGPs();
+        public Task<List<Patient>> GetAllPatients();
+        public Task<List<DateTime>> GetAvailableTimes(int gpId, int patientId);
+        public Task<Appointment?> GetAppointmentFromId(int? id);
+        public Task<List<Appointment>> GetAllForGP(string userName);
+        public Task<List<Appointment>> GetAllForPatient(string userName);
+        public Task<bool> CancelAppointmentById(int id);
+        public Task<IEnumerable<Appointment>?> GetAllAppointments();
+        public bool AppointmentExists(int id);
 
-
-        public Task<List<GP>> GetAllGPsAsync();
-        public Task<List<Patient>> GetAllPatientsAsync();
-
-        public Task<List<DateTime>> GetAvailableTimesAsync(int gpId, int patientId);
-        public Task<List<Appointment>> GetAllForGPAsync(string userName);
-        public Task<List<Appointment>> GetAllForPatientAsync(string userName);
     }
 }
