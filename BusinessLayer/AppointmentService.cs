@@ -20,6 +20,7 @@ namespace DoktormandenDk.BusinessLayer
                 return appointments;
             }
         }
+
         public async Task<List<Appointment>> GetAllForPatientAsync(string userName)
         {
             {
@@ -30,7 +31,7 @@ namespace DoktormandenDk.BusinessLayer
                 return appointments;
             }
         }
-        // TODO: Another place for this???
+
         public async Task<List<GP>> GetAllGPsAsync()
         {
             return await _context.GPs.Include(gp => gp.Appointments).ToListAsync();
@@ -47,19 +48,17 @@ namespace DoktormandenDk.BusinessLayer
         // every working day.
         // In this demo we only use GP with ID=1 !!
 
-        public async Task<List<DateTime>> GetAvailableTimesAsync(int patientId)
+        public async Task<List<DateTime>> GetAvailableTimesAsync(int gpId, int patientId)
         {
-            // Hardcoded to GP with ID=1 for this demo.
-            GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == 1);
+            GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == gpId);
+            Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == 1);
 
-            Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId  == patientId);
 
             List<Appointment> alreadyTakenTimes = new List<Appointment>();
             alreadyTakenTimes.AddRange(gp.Appointments);
             alreadyTakenTimes.AddRange(patient.Appointments);
             List<DateTime> availableTimes = new List<DateTime>();
-            DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);
-            
+            DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);           
             // earliest:9:00 next day 
            DateTime currentDate = from;
            

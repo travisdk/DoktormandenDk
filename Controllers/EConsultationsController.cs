@@ -130,7 +130,6 @@ namespace DoktormandenDk.Controllers
             {
                 return NotFound();
             }
-
             var eConsultation = await _context.EConsultations.FindAsync(id);
             if (eConsultation == null)
             {

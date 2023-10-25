@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="CreateForGP">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PatientId" />
+            
             <input type="hidden" asp-for="GPId" />
 
             <br />
@@ -20,16 +20,18 @@
                 <label asp-for="GPId" class="control-label">Læge</label>
                 @Html.DisplayFor(model => model.GP.Name)
             </div>
-
             <div class="form-group">
-                <label asp-for="Patient.Name" class="control-label">Patient</label>
-                @Html.DisplayFor(model => model.Patient.Name)
+                <label asp-for="PatientId" class="control-label"></label>
+                <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.Patients">
+                    <option value="" >- Vælg patient -</option>
+                </select>
             </div>
 
             <br />
             <div class="form-group">
                 <label asp-for="AppointmentTime" class="control-label">Vælg tidspunkt</label>
                 <select asp-for="AppointmentTime" class="form-control" asp-items="ViewBag.AvailableTimes">
+                    - Vælg ledig tid -
                 </select>
             </div>
             <br />
@@ -51,11 +53,48 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Tilbage til listen</a>
 </div>
 
-@section Scripts {
-    
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+          
+             $("#PatientId").change(function () {
+                var data = {
+                    gpId: $("#GPId").val(),
+                    patientId: $("#PatientId").val()
+                };
         
+                $.ajax({
+                    type: "GET",
+                    url: "/Appointments/GetAvailableTimes", 
+                    contentType: "application/json; charset=utf-8",
+                    data: data,
+                    dataType: "json",
+                    success: function (result) {
+                        // we have new availabletimes ready
+                        var availTimesSelectList = $("#AppointmentTime");
+                      
+                        availTimesSelectList.empty(); // drop existing items
+                        availTimesSelectList.append($("<option/>", { value: "", text: "- Vælg ledig tid -" }));
+
+                        // append newly found date/times
+                        $.each(result, function (idx, tid) {
+                            availTimesSelectList.append($("<option/>", { value: tid, text: tid.replace("T", " ") }));
+                        })
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+
+            });
+        });
+    </script>
 }

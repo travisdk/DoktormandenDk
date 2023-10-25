@@ -84,20 +84,14 @@ namespace DoktormandenDk.Controllers
             if (_userService.IsGP)
             {
                 var userAsGP = (GP)LoggedInUser;
-                var patient = Patients.Find(p => p.PatientId == 1);
-
+                ViewData["Patients"] = new SelectList(Patients, "PatientId", "Name");
                 var appointment = new Appointment
                 {
-                    Patient = patient,
-                    PatientId = 1, // hardcoded to patient with Id=1 for demo!
                     GP = userAsGP,
                     GPId = userAsGP.GPId,
-
                 };
 
-                List<DateTime> listDates = await _appointmentService.GetAvailableTimesAsync(patient.PatientId);
-
-                ViewData["AvailableTimes"] = new SelectList(listDates);
+                ViewData["AvailableTimes"] = new List<SelectListItem>();
                 return View("CreateForGP", appointment);
 
             }
@@ -105,20 +99,17 @@ namespace DoktormandenDk.Controllers
             {
                 var userAsPatient = (Patient)LoggedInUser;
 
-                var gp = GPs.Find(gp => gp.GPId == 1);
+                ViewData["GPs"] = new SelectList(GPs, "GPId", "Name");
 
                 var appointment = new Appointment
                 {
                     Patient = userAsPatient,
                     PatientId = userAsPatient.PatientId,
-                    GP = gp,
-                    GPId = 1, // hardcoded for demo 
-                   
+
                 };
 
-                List<DateTime> listDates = await _appointmentService.GetAvailableTimesAsync( userAsPatient.PatientId);
-               
-                ViewData["AvailableTimes"] = new SelectList(listDates);
+                ViewData["AvailableTimes"] = new List<SelectListItem>();
+
                 return View("CreateForPatient", appointment);
                 
             }
@@ -143,13 +134,13 @@ namespace DoktormandenDk.Controllers
                 return RedirectToAction(nameof(Index));
             }
            
-            if (appointment.PatientId != null && appointment.GPId !=null)
-            {
+            //if (appointment.PatientId != null && appointment.GPId !=null)
+            //{
 
-                var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
-                ViewData["AvailableTimes"] = new SelectList(times);
+            //    var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
+            //    ViewData["AvailableTimes"] = new SelectList(times);
                 
-            }
+            //}
 
            return View(appointment);
           
@@ -169,16 +160,30 @@ namespace DoktormandenDk.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if (appointment.PatientId != null && appointment.GPId != null)
-            {
+            //if (appointment.PatientId != null && appointment.GPId != null)
+            //{
 
-                var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
-                ViewData["AvailableTimes"] = new SelectList(times);
-            }
+            //    var times = await _appointmentService.GetAvailableTimesAsync(appointment.PatientId);
+            //    ViewData["AvailableTimes"] = new SelectList(times);
+            //}
 
             return View(appointment);
         }
 
+        [HttpGet] // Called by jQuery to refresh lists with avail. times
+        public async Task<IActionResult> GetAvailableTimes(int gpId, int patientId)
+        {
+            if (patientId == null || gpId == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                // Valid Patient and GP
+                var times = await _appointmentService.GetAvailableTimesAsync(gpId, patientId);
+                return Json(times);
+            }
+        }
 
         [TestValidAppointmentUser]
         // GET: Appointments/Delete/5
