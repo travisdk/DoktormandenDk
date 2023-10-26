@@ -103,7 +103,7 @@ namespace DoktormandenDk.BusinessLayer
 
                 if (currentDate.Hour == 16) currentDate += TimeSpan.FromHours(16.5); // => 9:00
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday) {
-                    currentDate.AddDays(2); // => Monday
+                    currentDate = currentDate + TimeSpan.FromDays(2); // => Monday
                 }
                 currentDate = currentDate + TimeSpan.FromMinutes(30);
 
