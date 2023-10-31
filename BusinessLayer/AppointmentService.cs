@@ -98,7 +98,7 @@ namespace DoktormandenDk.BusinessLayer
            List<DateTime> availableTimes = new List<DateTime>();
             
 
-            // ORIGINAL WAS THIS: Breaks if date of month = 31
+            // ORIGINAL WAS THIS but it breaks if date of month = 31 (in 31 day month)
             //DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);           
             
             // CHANGED START
