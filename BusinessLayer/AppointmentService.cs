@@ -1,5 +1,6 @@
 ﻿using DoktormandenDk.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace DoktormandenDk.BusinessLayer
 {
@@ -87,19 +88,29 @@ namespace DoktormandenDk.BusinessLayer
 
         public async Task<List<DateTime>> GetAvailableTimes(int gpId, int patientId)
         {
-            GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == gpId);
-            Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == 1);
+           GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == gpId);
+           Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == 1);
 
 
-            List<Appointment> alreadyTakenTimes = new List<Appointment>();
-            alreadyTakenTimes.AddRange(gp.Appointments);
-            alreadyTakenTimes.AddRange(patient.Appointments);
-            List<DateTime> availableTimes = new List<DateTime>();
-            DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);           
+           List<Appointment> alreadyTakenTimes = new List<Appointment>();
+           alreadyTakenTimes.AddRange(gp.Appointments);
+           alreadyTakenTimes.AddRange(patient.Appointments);
+           List<DateTime> availableTimes = new List<DateTime>();
+            
+
+            // ORIGINAL WAS THIS: Breaks if date of month = 31
+            //DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);           
+            
+            // CHANGED START
+            DateTime tomorrow0_00 = DateTime.Today + TimeSpan.FromDays(1);
+            DateTime from = new DateTime(tomorrow0_00.Year, tomorrow0_00.Month, tomorrow0_00.Day, 8, 30, 0);
+            // CHANGED END
+
+
             // earliest:9:00 next day 
-           DateTime currentDate = from;
+            DateTime currentDate = from;
            
-           while (currentDate < from + TimeSpan.FromDays(30)) {
+            while (currentDate < from + TimeSpan.FromDays(30)) {
 
                 if (currentDate.Hour == 16) currentDate += TimeSpan.FromHours(16.5); // => 9:00
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday) {
