@@ -84,30 +84,23 @@ namespace DoktormandenDk.BusinessLayer
         // Max 1 month into the feature for demo purpose.
         // We allow for times in 30minutes intervals, from 9:00 to 16:00,
         // every working day.
-        // In this demo we only use GP with ID=1 !!
-
         public async Task<List<DateTime>> GetAvailableTimes(int gpId, int patientId)
         {
            GP gp = _context.GPs.Include(gp => gp.Appointments).First(gp => gp.GPId == gpId);
-           Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == 1);
+           Patient patient = _context.Patients.Include(p => p.Appointments).First(p => p.PatientId == patientId);
 
 
            List<Appointment> alreadyTakenTimes = new List<Appointment>();
            alreadyTakenTimes.AddRange(gp.Appointments);
            alreadyTakenTimes.AddRange(patient.Appointments);
-           List<DateTime> availableTimes = new List<DateTime>();
+           
             
-
-            // ORIGINAL WAS THIS but it breaks if date of month = 31 (in 31 day month)
-            //DateTime from = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 8, 30, 0);           
-            
-            // CHANGED START
+            List<DateTime> availableTimes = new List<DateTime>();
+ 
             DateTime tomorrow0_00 = DateTime.Today + TimeSpan.FromDays(1);
             DateTime from = new DateTime(tomorrow0_00.Year, tomorrow0_00.Month, tomorrow0_00.Day, 8, 30, 0);
-            // CHANGED END
-
-
             // earliest:9:00 next day 
+
             DateTime currentDate = from;
            
             while (currentDate < from + TimeSpan.FromDays(30)) {
